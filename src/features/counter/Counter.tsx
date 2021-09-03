@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import {
-  decrement,
-  increment,
-  incrementByAmount,
-  incrementAsync,
-  incrementIfOdd,
-  selectCount,
-} from './counterSlice';
+import { decrement, increment, incrementByAmount, incrementAsync } from './counterSlice';
+import { selectCount } from './counterSlectors';
+import { incrementIfOdd } from './counterThunks';
 
 import styles from './Counter.module.scss';
 
