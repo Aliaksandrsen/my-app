@@ -77,29 +77,26 @@ const App: React.FC = () => {
   // similar to componentDidMount()
   useEffect(() => {
     // throw new Error('error');
-    fetch('https://jsonplaceholder.typicode.com/users/1/posts')
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          setIsLoaded(true);
-          setItems(result);
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        // Ошибка рендаринга не ловится!
-        (err) => {
-          setIsLoaded(false);
-          setError(err);
-          console.log('2then', err);
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    (async (): Promise<void> => {
+      try {
+        const res = await fetch(
+          'https://jsonplaceholder.typicode.com/users/1/posts'
+        );
+        if (!res.ok) {
+          throw new Error(res.statusText);
         }
-      )
-      // Ошибка рендаринга ловится
-      .catch((err) => {
+        const result: unknown = await res.json();
+
+        setIsLoaded(true);
+        setItems(result as Item[]);
+      } catch (err: unknown) {
         setIsLoaded(false);
-        setError(err);
+        setError(err as Error);
         console.log('catch', err);
-      });
+      }
+    })();
   }, []);
 
   if (error) {
